@@ -2,8 +2,7 @@
   <n-form ref="formRef" :model="model" label-placement="top">
     <n-grid cols="24" item-responsive responsive="screen">
       <n-form-item-gi span="12" label="Desporto" path="sport">
-        <n-select v-model:value="model.sport" placeholder="Deporto" :options="sports"
-          @update:value="handleSport" />
+        <n-select v-model:value="model.sport" placeholder="Deporto" :options="sports" @update:value="handleSport" />
       </n-form-item-gi>
       <n-form-item-gi span="11" offset="1" label="Cidade" path="city">
         <n-select v-model:value="model.city" placeholder="Cidade" :options="cities" />
@@ -41,13 +40,13 @@
       </n-form-item-gi>
       <n-form-item-gi span="19 m:11" offset="0 s:1 m:1" label="Tipo" path="tipo">
         <n-space>
-          <n-tag type="success" v-model:checked="roof.noroof" checkable>
+          <n-tag type="success" v-model:checked="model.roof.noroof" checkable>
             Descoberto
           </n-tag>
-          <n-tag v-model:checked="roof.roof" checkable>
+          <n-tag v-model:checked="model.roof.roof" checkable>
             Coberto
           </n-tag>
-          <n-tag v-model:checked="roof.indoor" checkable>
+          <n-tag v-model:checked="model.roof.indoor" checkable>
             Indoor
           </n-tag>
         </n-space>
@@ -61,7 +60,8 @@
       </n-form-item-gi>
     </n-grid>
     <div style="display: flex; justify-content: flex-end">
-      <n-button strong secondary type="primary" icon-placement="right" @click="handleValidateButtonClick">
+      <n-button :loading="loading" strong secondary type="primary" icon-placement="right"
+        @click="handleValidateButtonClick">
         Pesquisar
         <template #icon>
           <n-icon :component="Search"></n-icon>
@@ -77,30 +77,34 @@ import { Search, Refresh } from '@vicons/ionicons5'
 import { ref } from 'vue'
 import { Roof } from '../models/roof';
 import { Sports } from "../models/sports"
-import { Court, UrbanSports, UrbanSportsAll } from '../models/court';
+import { Court, CourtResult } from '../models/court';
+import { UrbanSportsPadel, UrbanSportsFilteredPadel } from '../assets/courts/padel.json';
+
 
 const proxy = "https://cors-anywhere.herokuapp.com/";
 
-const props = defineProps({
-    collapseState: {
-        type: Array,
-        default: ["1"]
-    },
-    courts: {
-        type: Array,
-        default: []
-    },
+const loading = ref(false);
+
+defineProps({
+  collapseState: {
+    type: Array,
+    default: ["1"]
+  },
+  courts: {
+    type: Array,
+    default: []
+  },
 })
 
 const emit = defineEmits(['update:collapseState', 'update:courts'])
 
 const formRef = ref<FormInst | null>(null)
 
-const roof = ref({
+let roof = ref({
   noroof: true,
   roof: true,
   indoor: true
-})
+});
 
 const model = ref({
   sport: 4,
@@ -108,6 +112,7 @@ const model = ref({
   date: '',
   time: '',
   duration: 90,
+  roof,
   courts: 2
 })
 
@@ -115,7 +120,10 @@ const sports = [{ label: "Padel", value: 4 }, { label: "Futebol 5", value: 1 }, 
 
 const cities = [{ label: "Porto", value: 12 }];
 
-const courtsSel = [{ label: "Todos", value: 0 }, { label: "Urban Sports - Todos", value: 1, data: UrbanSportsAll }, { label: "Urban Sports", value: 2, data: UrbanSports }];
+const courtsPadel = [{ label: "Todos", value: 0 }, { label: "Urban Sports - Todos", value: 1, data: UrbanSportsPadel }, { label: "Urban Sports", value: 2, data: UrbanSportsFilteredPadel }];
+// const courtsFutebol5 = [{ label: "Todos", value: 0 }, { label: "Urban Sports - Todos", value: 1, data:  }, { label: "Urban Sports", value: 2, data:  }];
+// const courtsTenis = [{ label: "Todos", value: 0 }, { label: "Urban Sports - Todos", value: 1, data:  }, { label: "Urban Sports", value: 2, data:  }];
+let courtsSel = courtsPadel;
 
 const goToLink = () => {
   window.open('https://cors-anywhere.herokuapp.com/', '_blank');
@@ -144,10 +152,17 @@ const handleSport = (value: number) => {
   switch (value) {
     case Sports.Padel:
       model.value.duration = 90;
+      courtsSel = courtsPadel;
       break;
 
     case Sports.Futebol5:
       model.value.duration = 60;
+      courtsSel = courtsPadel;
+      break;
+
+    case Sports.Tenis:
+      model.value.duration = 60;
+      courtsSel = courtsPadel;
       break;
   }
 }
@@ -172,9 +187,11 @@ const handleValidateButtonClick = (e: MouseEvent) => {
         "&page=1&page_size=100000";
 
       const headers = { 'X-Requested-With': '' };
+      loading.value = true;
       const res = await fetch(url, { headers })
       const data = await res.json();
       getCourts(data);
+      loading.value = false;
       emit('update:collapseState', ["2"])
 
     } else {
@@ -199,38 +216,27 @@ const getCourts = (data: any) => {
         if (slots[j].locked) break;
         freeSlots++;
         if ((freeSlots * slotLength) == model.value.duration) {
-          courts.push({ name: court.club_name, court: court.court_name, roof: getRoof(court.roof), start: slot.start, end: slots[j].end });
+          courts.push(new CourtResult(court, slot.start, slots[j].end));
           break;
         }
       }
     }
   }
   courts.sort(function (a, b) {
-    return ('' + a.start).localeCompare(b.start);;
+    return ('' + a.startTime).localeCompare(b.startTime);;
   })
   console.log(courts)
   emit('update:courts', courts);
 }
 
-const getRoof = (roof: number) => {
-  switch (roof) {
-    case Roof.Descoberto:
-      return "Descoberto";
-    case Roof.Coberto:
-      return "Coberto";
-    case Roof.Indoor:
-      return "Indoor";
-  }
-}
-
 const isInvalidRoof = (value: number) => {
   switch (value) {
     case Roof.Descoberto:
-      return !roof.value.noroof;
+      return !model.value.roof.noroof;
     case Roof.Coberto:
-      return !roof.value.roof;
+      return !model.value.roof.roof;
     case Roof.Indoor:
-      return !roof.value.indoor;
+      return !model.value.roof.indoor;
   }
 }
 
@@ -241,7 +247,6 @@ const isInvalidRoof = (value: number) => {
 </script>
 
 <style lang="scss">
-
 .button-refresh {
   justify-self: flex-end;
 }

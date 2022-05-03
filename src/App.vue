@@ -11,17 +11,21 @@
         <results v-model:courts="courts"></results>
       </n-collapse-item>
     </n-collapse>
+    <n-back-top :right="100" :visibility-height="300" :style="{
+      transition: 'all .3s cubic-bezier(.4, 0, .2, 1)'
+    }">
+      <n-icon :component="ArrowUp"></n-icon>
+    </n-back-top>
     <n-global-style />
   </n-config-provider>
 </template>
 
 <script lang="ts" setup>
-import { FormInst, NButton, NForm, NFormItemGi, NCollapse, NCollapseItem, NGrid, NSelect, NDatePicker, NTimePicker, NRadioGroup, NRadioButton, NTag, NSpace, NConfigProvider, GlobalTheme, darkTheme, NGlobalStyle, NGradientText, NIcon } from 'naive-ui';
-import { Search, Refresh } from '@vicons/ionicons5'
-import SearchCourts from './components/SearchCourts'
-import Results from './components/Results'
+import { NBackTop, NIcon, NCollapse, NCollapseItem, NConfigProvider, GlobalTheme, darkTheme, NGlobalStyle, NGradientText } from 'naive-ui';
+import SearchCourts from './components/SearchCourts.vue'
+import Results from './components/Results.vue'
+import { ArrowUp } from '@vicons/ionicons5'
 import { ref } from "vue";
-import { Court, UrbanSports, UrbanSportsAll } from './models/court';
 
 const theme = ref<GlobalTheme | null>(darkTheme)
 
@@ -44,5 +48,4 @@ const courts = ref([]);
 .title {
   margin-bottom: 16px;
 }
-
 </style>

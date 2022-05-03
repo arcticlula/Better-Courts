@@ -1,3 +1,5 @@
+import { Roof } from "./roof";
+
 export interface ICourt {
     club_id: string;
     club_name: string;
@@ -11,6 +13,7 @@ export interface ICourt {
     lng: string;
     phone: string;
     slots: ISlot[];
+    photos: IPhoto[];
 }
 
 export interface ISlot {
@@ -21,6 +24,11 @@ export interface ISlot {
     date: string;
     locked: boolean;
     status: string;
+}
+
+export interface IPhoto {
+    court_id: string;
+    path: string;
 }
 
 export class Court {
@@ -36,6 +44,7 @@ export class Court {
     lng: string;
     phone: string;
     slots: ISlot[];
+    photos: IPhoto[];
     constructor(court: ICourt) {
         this.club_id = parseInt(court.club_id, 10);
         this.club_name = court.club_name;
@@ -49,40 +58,45 @@ export class Court {
         this.lng = court.lng;
         this.phone = court.phone;
         this.slots = court.slots;
+        this.photos = court.photos;
     }
 }
 
-export const UrbanSportsAll = [
-    { id: 8, name: 'Top-padel Fluvial' },
-    { id: 79, name: 'Top-padel Industrial' },
-    { id: 462, name: 'Top-padel Quinta do Fojo' },
-    { id: 26, name: 'Quinta de Monserrate Sport - Parque da Cidade' },
-    { id: 93, name: 'Quinta de Monserrate Sport - Indoor' },
-    { id: 54, name: 'Quinta de Monserrate Sport - Clube' },
-    { id: 401, name: 'Norte Padel' },
-    { id: 492, name: 'Maia Padel' },
-    { id: 247, name: 'PadeLovers Matosinhos' },
-    { id: 372, name: 'Pure Sports - Escola Francisco Torrinha' },
-    { id: 246, name: 'Mar Padel' },
-    { id: 230, name: 'Total Padel' },
-    { id: 365, name: 'Ginásio Champion Criterion' },
-    { id: 77, name: 'Grupo Desportivo Banco Pinto e Sotto Mayor' },
-    { id: 470, name: 'Parque da Aguda' },
-    { id: 521, name: 'Trofa Padel' },
-    { id: 473, name: 'Padel Pedra' },
-    { id: 500, name: 'ProPadel' }
-] //missing quinta monserrate gaia
 
-export const UrbanSports = [
-    { id: 8, name: 'Top-padel Fluvial' },
-    { id: 79, name: 'Top-padel Industrial' },
-    { id: 462, name: 'Top-padel Quinta do Fojo' },
-    { id: 26, name: 'Quinta de Monserrate Sport - Parque da Cidade' },
-    { id: 93, name: 'Quinta de Monserrate Sport - Indoor' },
-    { id: 54, name: 'Quinta de Monserrate Sport - Clube' },
-    { id: 401, name: 'Norte Padel' },
-    { id: 492, name: 'Maia Padel' },
-    { id: 247, name: 'PadeLovers Matosinhos' },
-    { id: 372, name: 'Pure Sports - Escola Francisco Torrinha' },
-    { id: 246, name: 'Mar Padel' }
-]
+export class CourtResult {
+    club_name: string;
+    court_name: string;
+    roof: string;
+    startTime: string;
+    endTime: string;
+    lat: string;
+    lng: string;
+    phone: string;
+    address: string;
+    photos: IPhoto[];
+    constructor(court: Court, startTime: string, endTime: string) {
+        this.club_name = court.club_name;
+        this.court_name = court.court_name;
+        this.roof = getRoof(court.roof);
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.lat = court.lat;
+        this.lng = court.lng;
+        this.phone = court.phone;
+        this.address = court.address;
+        this.photos = court.photos;
+    }
+}
+
+const getRoof = (roof: number) => {
+    switch (roof) {
+        case Roof.Descoberto:
+            return "Descoberto";
+        case Roof.Coberto:
+            return "Coberto";
+        case Roof.Indoor:
+            return "Indoor";
+        default:
+            return "";
+    }
+}

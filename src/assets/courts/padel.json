@@ -1,0 +1,122 @@
+{
+    "UrbanSportsFilteredPadel": [
+        {
+            "id": 8,
+            "name": "Top-padel Fluvial"
+        },
+        {
+            "id": 79,
+            "name": "Top-padel Industrial"
+        },
+        {
+            "id": 462,
+            "name": "Top-padel Quinta do Fojo"
+        },
+        {
+            "id": 26,
+            "name": "Quinta de Monserrate Sport - Parque da Cidade"
+        },
+        {
+            "id": 93,
+            "name": "Quinta de Monserrate Sport - Indoor"
+        },
+        {
+            "id": 54,
+            "name": "Quinta de Monserrate Sport - Clube"
+        },
+        {
+            "id": 401,
+            "name": "Norte Padel"
+        },
+        {
+            "id": 492,
+            "name": "Maia Padel"
+        },
+        {
+            "id": 247,
+            "name": "PadeLovers Matosinhos"
+        },
+        {
+            "id": 372,
+            "name": "Pure Sports - Escola Francisco Torrinha"
+        },
+        {
+            "id": 246,
+            "name": "Mar Padel"
+        }
+    ],
+    "UrbanSportsPadel": [
+        {
+            "id": 8,
+            "name": "Top-padel Fluvial"
+        },
+        {
+            "id": 79,
+            "name": "Top-padel Industrial"
+        },
+        {
+            "id": 462,
+            "name": "Top-padel Quinta do Fojo"
+        },
+        {
+            "id": 26,
+            "name": "Quinta de Monserrate Sport - Parque da Cidade"
+        },
+        {
+            "id": 93,
+            "name": "Quinta de Monserrate Sport - Indoor"
+        },
+        {
+            "id": 54,
+            "name": "Quinta de Monserrate Sport - Clube"
+        },
+        {
+            "id": 401,
+            "name": "Norte Padel"
+        },
+        {
+            "id": 492,
+            "name": "Maia Padel"
+        },
+        {
+            "id": 247,
+            "name": "PadeLovers Matosinhos"
+        },
+        {
+            "id": 372,
+            "name": "Pure Sports - Escola Francisco Torrinha"
+        },
+        {
+            "id": 246,
+            "name": "Mar Padel"
+        },
+        {
+            "id": 230,
+            "name": "Total Padel"
+        },
+        {
+            "id": 365,
+            "name": "Ginásio Champion Criterion"
+        },
+        {
+            "id": 77,
+            "name": "Grupo Desportivo Banco Pinto e Sotto Mayor"
+        },
+        {
+            "id": 470,
+            "name": "Parque da Aguda"
+        },
+        {
+            "id": 521,
+            "name": "Trofa Padel"
+        },
+        {
+            "id": 473,
+            "name": "Padel Pedra"
+        },
+        {
+            "id": 500,
+            "name": "ProPadel"
+        }
+    ]
+}
