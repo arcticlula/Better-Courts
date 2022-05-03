@@ -4,7 +4,7 @@
     <n-card :title="court.club_name" embedded :bordered="false" @click="openModal(court)">
       <div class="court-result">
         <div class="court-image">
-          <n-image object-fit="cover" :src="court?.photos[0].path" :height="90" :width="130" preview-disabled></n-image>
+          <n-image object-fit="cover" :src="getPhoto(court)" :height="90" :width="130" preview-disabled></n-image>
         </div>
         <div class="court-name">{{ court.court_name }}</div>
         <div class="court-roof">{{ court.roof }}</div>
@@ -33,7 +33,7 @@
         <n-button tag="a" :href="'tel:' + currentCourt?.phone">
           <n-icon :component="Call"></n-icon>
         </n-button>
-        <n-button tag="a" :href="getMapsLink()">
+        <n-button tag="a" :href="getMapsLink()" target="_blank">
           <n-icon :component="Location"></n-icon>
         </n-button>
       </n-space>
@@ -46,7 +46,7 @@
 import { NImage, NModal, NCard, NButton, NCarousel, NSpace, NIcon } from 'naive-ui';
 import { Call, Location } from '@vicons/ionicons5'
 import { PropType, ref } from "vue";
-import { useMobileDetection } from "vue3-mobile-detection";
+// import { useMobileDetection } from "vue3-mobile-detection";
 import { CourtResult } from '@/models/court';
 
 const props = defineProps({
@@ -57,7 +57,7 @@ const props = defineProps({
 })
 
 const showModal = ref(false);
-const { isMobile } = useMobileDetection();
+// const { isMobile } = useMobileDetection();
 const currentCourt = ref<CourtResult | null>(null);
 
 const openModal = (court: CourtResult) => {
@@ -66,11 +66,14 @@ const openModal = (court: CourtResult) => {
   showModal.value = true;
 }
 
+const getPhoto = (court: CourtResult) => {
+  return `https://www.aircourts.com/index.php/api/get_court_thumbnail/${court.court_id}`
+}
+
 const getMapsLink = () => {
   const lat = currentCourt.value?.lat;
   const lng = currentCourt.value?.lng;
-  console.log(isMobile())
-  return isMobile() ? "maps://" : "https://" + `maps.google.com/maps?daddr=${lat},${lng}&amp;ll=`;
+  return `https://maps.google.com/maps?daddr=${lat},${lng}&amp;ll=`;
 }
 
 </script>

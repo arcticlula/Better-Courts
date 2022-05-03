@@ -29,6 +29,7 @@ export interface ISlot {
 export interface IPhoto {
     court_id: string;
     path: string;
+    is_cover: string;
 }
 
 export class Court {
@@ -64,6 +65,7 @@ export class Court {
 
 
 export class CourtResult {
+    court_id: number;
     club_name: string;
     court_name: string;
     roof: string;
@@ -75,6 +77,7 @@ export class CourtResult {
     address: string;
     photos: IPhoto[];
     constructor(court: Court, startTime: string, endTime: string) {
+        this.court_id = court.court_id;
         this.club_name = court.club_name;
         this.court_name = court.court_name;
         this.roof = getRoof(court.roof);
