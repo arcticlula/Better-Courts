@@ -30,6 +30,9 @@
     </div>
     <template #footer>
       <n-space justify="end">
+        <n-button tag="a" :href="getACLink()" target="_blank">
+          <n-icon :component="Link"></n-icon>
+        </n-button>
         <n-button tag="a" :href="'tel:' + currentCourt?.phone">
           <n-icon :component="Call"></n-icon>
         </n-button>
@@ -44,7 +47,7 @@
 
 <script lang="ts" setup>
 import { NImage, NModal, NCard, NButton, NCarousel, NSpace, NIcon } from 'naive-ui';
-import { Call, Location } from '@vicons/ionicons5'
+import { Link, Call, Location } from '@vicons/ionicons5'
 import { PropType, ref } from "vue";
 // import { useMobileDetection } from "vue3-mobile-detection";
 import { CourtResult } from '@/models/court';
@@ -68,6 +71,15 @@ const openModal = (court: CourtResult) => {
 
 const getPhoto = (court: CourtResult) => {
   return `https://www.aircourts.com/index.php/api/get_court_thumbnail/${court.court_id}`
+}
+
+const getACLink = () => {
+  const clubId = currentCourt.value?.club_id;
+  const date = currentCourt.value?.date;
+  let time = currentCourt.value?.startTime;
+  time = time ? encodeURIComponent(time) : '';
+
+  return `https://www.aircourts.com/index.php/site/view_club/${clubId}/${date}/${time}`;
 }
 
 const getMapsLink = () => {

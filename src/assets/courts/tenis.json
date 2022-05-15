@@ -1,5 +1,5 @@
 {
-    "UrbanSportsPadel": [
+    "UrbanSportsTenis": [
         {
             "id": 26,
             "name": "Quinta de Monserrate Sport - Parque da Cidade"
@@ -9,7 +9,7 @@
             "name": "Grupo Desportivo Banco Pinto e Sotto Mayor"
         },
         {
-            "id": 470,
+            "id": 23,
             "name": "Tennis Lovers Boavista"
         }
     ]

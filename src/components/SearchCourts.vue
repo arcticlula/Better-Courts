@@ -23,7 +23,7 @@
         </n-button>
       </n-form-item-gi>
       <n-form-item-gi span="12 m:7" label="Duração" path="duration">
-        <n-radio-group size="small" v-model:value="model.duration" name="duration">
+        <n-radio-group v-model:value="model.duration" name="duration">
           <n-radio-button :value="60">
             1:00
           </n-radio-button>
@@ -58,6 +58,13 @@
           </template>
         </n-button>
       </n-form-item-gi>
+      <!-- <n-form-item-gi span="4" class="button-refresh">
+        <n-button @click="goToLink">
+          <template #icon>
+            <n-icon :component="Calendar"></n-icon>
+          </template>
+        </n-button>
+      </n-form-item-gi> -->
     </n-grid>
     <div style="display: flex; justify-content: flex-end">
       <n-button :loading="loading" strong secondary type="primary" icon-placement="right"
@@ -72,18 +79,20 @@
 </template>
 
 <script lang="ts" setup>
-import { FormInst, NButton, NForm, NFormItemGi, NGrid, NSelect, NDatePicker, NTimePicker, NRadioGroup, NRadioButton, NTag, NSpace, NConfigProvider, GlobalTheme, darkTheme, NGlobalStyle, NGradientText, NIcon } from 'naive-ui';
-import { Search, Refresh } from '@vicons/ionicons5'
+import { FormInst, NButton, NForm, NFormItemGi, NGrid, NSelect, NDatePicker, NTimePicker, NRadioGroup, NRadioButton, NTag, NSpace, NIcon, useMessage } from 'naive-ui';
+import { Search, Refresh, Calendar } from '@vicons/ionicons5'
 import { ref } from 'vue'
 import { Roof } from '../models/roof';
 import { Sports } from "../models/sports"
 import { Court, CourtResult } from '../models/court';
 import { UrbanSportsPadel, UrbanSportsFilteredPadel } from '../assets/courts/padel.json';
+import { UrbanSportsTenis } from '../assets/courts/tenis.json';
 
 
 const proxy = "https://cors-anywhere.herokuapp.com/";
 
 const loading = ref(false);
+const message = useMessage();
 
 defineProps({
   collapseState: {
@@ -113,16 +122,16 @@ const model = ref({
   time: '',
   duration: 90,
   roof,
-  courts: 2
+  courts: 1
 })
 
 const sports = [{ label: "Padel", value: 4 }, { label: "Futebol 5", value: 1 }, { label: "Tenis", value: 3 }];
 
 const cities = [{ label: "Porto", value: 12 }];
 
-const courtsPadel = [{ label: "Todos", value: 0 }, { label: "Urban Sports - Todos", value: 1, data: UrbanSportsPadel }, { label: "Urban Sports", value: 2, data: UrbanSportsFilteredPadel }];
+const courtsPadel = [{ label: "Todos", value: 0 }, { label: "Urban Sports", value: 1, data: UrbanSportsFilteredPadel }, { label: "Urban Sports - Todos", value: 2, data: UrbanSportsPadel }];
 // const courtsFutebol5 = [{ label: "Todos", value: 0 }, { label: "Urban Sports - Todos", value: 1, data:  }, { label: "Urban Sports", value: 2, data:  }];
-// const courtsTenis = [{ label: "Todos", value: 0 }, { label: "Urban Sports - Todos", value: 1, data:  }, { label: "Urban Sports", value: 2, data:  }];
+const courtsTenis = [{ label: "Todos", value: 0 }, { label: "Urban Sports", value: 1, data: UrbanSportsTenis }];
 let courtsSel = courtsPadel;
 
 const goToLink = () => {
@@ -162,7 +171,7 @@ const handleSport = (value: number) => {
 
     case Sports.Tenis:
       model.value.duration = 60;
-      courtsSel = courtsPadel;
+      courtsSel = courtsTenis;
       break;
   }
 }
@@ -188,11 +197,16 @@ const handleValidateButtonClick = (e: MouseEvent) => {
 
       const headers = { 'X-Requested-With': '' };
       loading.value = true;
-      const res = await fetch(url, { headers })
-      const data = await res.json();
-      getCourts(data);
+      const res = await fetch(url, { headers });
+      if (res.ok) {
+        const data = await res.json();
+        getCourts(data);
+        emit('update:collapseState', ["2"])
+      }
+      else {
+        message.error('Não foi possível fazer o pedido.', { duration: 2000 });
+      }
       loading.value = false;
-      emit('update:collapseState', ["2"])
 
     } else {
       console.log(errors)
@@ -216,7 +230,7 @@ const getCourts = (data: any) => {
         if (slots[j].locked) break;
         freeSlots++;
         if ((freeSlots * slotLength) == model.value.duration) {
-          courts.push(new CourtResult(court, slot.start, slots[j].end));
+          courts.push(new CourtResult(court, slot.date, slot.start, slots[j].end));
           break;
         }
       }
