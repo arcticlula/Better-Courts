@@ -1,28 +1,28 @@
 <template>
   <n-form ref="formRef" :model="model" label-placement="top">
     <n-grid cols="24" item-responsive responsive="screen">
-      <n-form-item-gi span="12" label="Desporto" path="sport">
+      <n-form-item-gi span="12 m:6" label="Desporto" path="sport">
         <n-select v-model:value="model.sport" placeholder="Deporto" :options="sports" @update:value="handleSport" />
       </n-form-item-gi>
-      <n-form-item-gi span="11" offset="1" label="Cidade" path="city">
+      <n-form-item-gi span="11 m:6" offset="1 m:1" label="Cidade" path="city">
         <n-select v-model:value="model.city" placeholder="Cidade" :options="cities" />
       </n-form-item-gi>
-      <n-form-item-gi span="10 s:11" label="Data" path="date">
+      <n-form-item-gi span="12 s:7 m:4" offset="m:1" label="Data" path="date">
         <n-date-picker v-model:formatted-value="model.date" type="date" value-format="yyyy-MM-dd" :actions="null"
           input-readonly />
       </n-form-item-gi>
-      <n-form-item-gi span="8 s:8" offset="1 s:1" label="Hora Início" path="time">
+      <n-form-item-gi span="6 s:4 m:3" offset="1 s:1 m:1" label="Hora Início" path="time">
         <n-time-picker v-model:formatted-value="model.time" format="HH:mm" :minutes="30" :actions="null"
           input-readonly />
       </n-form-item-gi>
-      <n-form-item-gi span="4 s:3" offset="1 s:1" class="button-refresh">
+      <n-form-item-gi span="4 s:2 m:2" offset="1 s:1 m:0" class="button-refresh">
         <n-button @click="getCurrentDate">
           <template #icon>
             <n-icon :component="Refresh"></n-icon>
           </template>
         </n-button>
       </n-form-item-gi>
-      <n-form-item-gi span="12 m:7" label="Duração" path="duration">
+      <n-form-item-gi span="12 s:7 m:7" offset="0 s:2 m:0" label="Duração" path="duration">
         <n-radio-group v-model:value="model.duration" name="duration">
           <n-radio-button :value="60">
             1:00
@@ -35,10 +35,10 @@
           </n-radio-button>
         </n-radio-group>
       </n-form-item-gi>
-      <n-form-item-gi span="11 m:4" offset="1" label="Campos" path="sport">
+      <n-form-item-gi span="11 s:7 m:4" offset="1 s:0 m:0" label="Campos" path="sport">
         <n-select v-model:value="model.courts" placeholder="Campos" :options="courtsSel" />
       </n-form-item-gi>
-      <n-form-item-gi span="19 m:11" offset="0 s:1 m:1" label="Tipo" path="tipo">
+      <n-form-item-gi span="19 s:11 m:8" offset="0 s:1 m:3" label="Tipo" path="tipo">
         <n-space>
           <n-tag type="success" v-model:checked="model.roof.noroof" checkable>
             Descoberto
@@ -51,7 +51,7 @@
           </n-tag>
         </n-space>
       </n-form-item-gi>
-      <n-form-item-gi span="4" offset="1" class="button-refresh">
+      <n-form-item-gi span="4 s:4 m:2" offset="1 m:0" class="button-refresh">
         <n-button @click="goToLink">
           <template #icon>
             <n-icon :component="Refresh"></n-icon>

@@ -1,19 +1,20 @@
 <template>
   <!-- <pre>{{ JSON.stringify(courts, null, 2) }}</pre> -->
-  <div v-for="court of courts" style="margin-bottom: 8px;">
-    <n-card :title="court.club_name" embedded :bordered="false" @click="openModal(court)">
-      <div class="court-result">
-        <div class="court-image">
-          <n-image object-fit="cover" :src="getPhoto(court)" :height="90" :width="130" preview-disabled></n-image>
+  <n-grid cols="24" item-responsive responsive="screen" x-gap="8" y-gap="8">
+    <n-gi span="24 m:12 l:8" v-for="court of courts">
+      <n-card :title="court.club_name" embedded :bordered="false" @click="openModal(court)">
+        <div class="court-result">
+          <div class="court-image">
+            <n-image object-fit="cover" :src="getPhoto(court)" :height="90" :width="130" preview-disabled></n-image>
+          </div>
+          <div class="court-name">{{ court.court_name }}</div>
+          <div class="court-roof">{{ court.roof }}</div>
+          <div class="court-time">{{ court.startTime }} - {{ court.endTime }}</div>
         </div>
-        <div class="court-name">{{ court.court_name }}</div>
-        <div class="court-roof">{{ court.roof }}</div>
-        <div class="court-time">{{ court.startTime }} - {{ court.endTime }}</div>
-      </div>
-    </n-card>
-  </div>
-  <n-modal v-model:show="showModal" :bordered="true" preset="card">
-    <!-- <n-card :bordered="false" size="huge" role="dialog" aria-modal="true"> -->
+      </n-card>
+    </n-gi>
+  </n-grid>
+  <n-modal v-model:show="showModal" :bordered="true" preset="card" class="modal-card">
     <template #header>
       <h3>{{ currentCourt?.club_name }}</h3>
     </template>
@@ -41,12 +42,11 @@
         </n-button>
       </n-space>
     </template>
-    <!-- </n-card> -->
   </n-modal>
 </template>
 
 <script lang="ts" setup>
-import { NImage, NModal, NCard, NButton, NCarousel, NSpace, NIcon } from 'naive-ui';
+import { NImage, NModal, NCard, NButton, NCarousel, NSpace, NIcon, NGrid, NGi } from 'naive-ui';
 import { Link, Call, Location } from '@vicons/ionicons5'
 import { PropType, ref } from "vue";
 // import { useMobileDetection } from "vue3-mobile-detection";
@@ -127,5 +127,23 @@ const getMapsLink = () => {
   width: 100%;
   height: 240px;
   object-fit: cover;
+}
+
+@media screen and (max-width: 700px) {
+  .modal-card {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 701px) and (max-width: 1023px) {
+  .modal-card {
+    width: 80%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .modal-card {
+    width: 80vh;
+  }
 }
 </style>
