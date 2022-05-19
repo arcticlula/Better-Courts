@@ -1,20 +1,10 @@
 <template>
-  <!-- <pre>{{ JSON.stringify(courts, null, 2) }}</pre> -->
   <n-grid cols="24" item-responsive responsive="screen" x-gap="8" y-gap="8">
     <n-gi span="24 m:12 l:8" v-for="court of courts">
-      <n-card :title="court.club_name" embedded :bordered="false" @click="openModal(court)">
-        <div class="court-result">
-          <div class="court-image">
-            <n-image object-fit="cover" :src="getPhoto(court)" :height="90" :width="130" preview-disabled></n-image>
-          </div>
-          <div class="court-name">{{ court.court_name }}</div>
-          <div class="court-roof">{{ court.roof }}</div>
-          <div class="court-time">{{ court.startTime }} - {{ court.endTime }}</div>
-        </div>
-      </n-card>
+      <result :court="court"></result>
     </n-gi>
   </n-grid>
-  <n-modal v-model:show="showModal" :bordered="true" preset="card" class="modal-card">
+  <n-modal v-model:show="showCourtModal" :bordered="true" preset="card" class="modal-card">
     <template #header>
       <h3>{{ currentCourt?.club_name }}</h3>
     </template>
@@ -46,32 +36,18 @@
 </template>
 
 <script lang="ts" setup>
-import { NImage, NModal, NCard, NButton, NCarousel, NSpace, NIcon, NGrid, NGi } from 'naive-ui';
+import Result from './Result.vue';
+import { NModal, NButton, NCarousel, NSpace, NIcon, NGrid, NGi } from 'naive-ui';
 import { Link, Call, Location } from '@vicons/ionicons5'
-import { PropType, ref } from "vue";
-// import { useMobileDetection } from "vue3-mobile-detection";
-import { CourtResult } from '@/models/court';
+import { useCourtStore } from '@/store/court';
+import { useGlobalStore } from '@/store/global';
+import { storeToRefs } from 'pinia';
 
-const props = defineProps({
-  courts: {
-    type: Array as PropType<Array<CourtResult>>,
-    default: () => []
-  },
-})
+const globalStore = useGlobalStore()
+const courtStore = useCourtStore()
 
-const showModal = ref(false);
-// const { isMobile } = useMobileDetection();
-const currentCourt = ref<CourtResult | null>(null);
-
-const openModal = (court: CourtResult) => {
-  currentCourt.value = court;
-  console.log(currentCourt)
-  showModal.value = true;
-}
-
-const getPhoto = (court: CourtResult) => {
-  return `https://www.aircourts.com/index.php/api/get_court_thumbnail/${court.court_id}`
-}
+const { showCourtModal } = storeToRefs(globalStore);
+const { courts, currentCourt } = storeToRefs(courtStore);
 
 const getACLink = () => {
   const clubId = currentCourt.value?.club_id;
@@ -91,38 +67,6 @@ const getMapsLink = () => {
 </script>
 
 <style lang="scss">
-.n-card>.n-card-header {
-  font-size: 14px;
-}
-
-.court-result {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  grid-template-rows: repeat(3, 1fr);
-  grid-column-gap: 12px;
-  grid-row-gap: 0px;
-}
-
-.court-image {
-  grid-area: 1 / 1 / 4 / 2;
-}
-
-.court-name {
-  grid-area: 1 / 2 / 2 / 3;
-  font-weight: bold;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
-}
-
-.court-roof {
-  grid-area: 2 / 2 / 3 / 3;
-}
-
-.court-time {
-  grid-area: 3 / 2 / 4 / 3;
-}
-
 .carousel-img {
   width: 100%;
   height: 240px;
