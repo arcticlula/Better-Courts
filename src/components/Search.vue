@@ -37,7 +37,8 @@
         </n-radio-group>
       </n-form-item-gi>
       <n-form-item-gi span="11 s:7 m:4" offset="1 s:0 m:0" label="Campos" path="sport">
-        <n-select v-model:value="searchForm.courts" placeholder="Campos" :options="courtsSelection" />
+        <n-select v-model:value="searchForm.courts" placeholder="Campos" :options="courtsSelection"
+          @update:value="handleCourt" />
       </n-form-item-gi>
       <n-form-item-gi span="19 s:11 m:8" offset="0 s:1 m:3" label="Tipo" path="tipo">
         <n-space>
@@ -82,11 +83,11 @@
 import { FormInst, NButton, NForm, NFormItemGi, NGrid, NSelect, NDatePicker, NTimePicker, NRadioGroup, NRadioButton, NTag, NSpace, NIcon, useMessage } from 'naive-ui';
 import { Search, Refresh, Calendar } from '@vicons/ionicons5'
 import { ref } from 'vue'
-import { Sports } from "../models/sports"
 import { useGlobalStore } from '@/store/global';
 import { useSearchStore } from '@/store/search';
 import { useCourtStore } from '@/store/court';
 import { storeToRefs } from 'pinia';
+import { Sports } from '../models/sports';
 
 const globalStore = useGlobalStore()
 const searchStore = useSearchStore()
@@ -100,8 +101,9 @@ const { courtsSelection } = storeToRefs(courtStore);
 const { getCourts, setCourtsSelection } = courtStore;
 
 const formRef = ref<FormInst | null>(null)
+const message = useMessage();
 
-const sports = [{ label: "Padel", value: 4 }, { label: "Futebol 5", value: 1 }, { label: "Tenis", value: 3 }];
+const sports = [{ label: "Padel", value: 4 }, { label: "Futebol 5", value: 1 }, { label: "Futsal", value: 6 }, { label: "Tenis", value: 3 }];
 const cities = [{ label: "Porto", value: 12 }];
 
 const goToLink = () => {
@@ -127,15 +129,26 @@ const getCurrentDate = () => {
   searchForm.value.time = `${time[0]}:${time[1]}`;
 }
 
-const handleSport = (sport: Sports) => {
-  setCourtsSelection(sport);
+const handleSport = () => {
+  setCourtsSelection();
+}
+
+const handleCourt = () => {
+  switch (searchForm.value.sport) {
+    case Sports.Padel:
+      searchForm.value.duration = searchForm.value.courts === 2 ? 60 : 90;
+      break;
+  }
 }
 
 const search = (e: MouseEvent) => {
   e.preventDefault()
   formRef.value?.validate(async (errors) => {
     if (!errors) {
-      getCourts();
+      const res = await getCourts();
+      if (!res) {
+        message.error('Não foi possível fazer o pedido.', { duration: 2000 });
+      }
     }
     else {
       console.log(errors)

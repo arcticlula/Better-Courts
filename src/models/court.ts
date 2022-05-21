@@ -6,6 +6,7 @@ export interface ICourt {
     id: string;
     name: string;
     slug: string;
+    booking_length: string;
     booking_calendar_length: string;
     roof: string;
     surface: string;
@@ -33,12 +34,23 @@ export interface IPhoto {
     is_cover: string;
 }
 
+export interface ICourtSelection {
+    label: string,
+    value: number,
+    data?: {
+        id: number;
+        court_id?: number[];
+        name: string;
+    }[]
+}
+
 export class Court {
     club_id: number;
     club_name: string;
     court_id: number;
     court_name: string;
     slug: string;
+    booking_length: number;
     booking_calendar_length: number;
     roof: number;
     surface: string;
@@ -54,6 +66,7 @@ export class Court {
         this.court_id = parseInt(court.id, 10);
         this.court_name = court.name;
         this.slug = court.slug;
+        this.booking_length = parseInt(court.booking_length, 10);;
         this.booking_calendar_length = parseInt(court.booking_calendar_length, 10);;
         this.roof = parseInt(court.roof, 10);
         this.surface = court.surface;
@@ -73,9 +86,11 @@ export class CourtResult {
     club_name: string;
     court_name: string;
     roof: string;
+    surface: string;
     date: string;
     startTime: string;
     endTime: string;
+    datetime: string;
     lat: string;
     lng: string;
     phone: string;
@@ -87,9 +102,11 @@ export class CourtResult {
         this.club_name = court.club_name;
         this.court_name = court.court_name;
         this.roof = getRoof(court.roof);
+        this.surface = court.surface;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.datetime = date + startTime;
         this.lat = court.lat;
         this.lng = court.lng;
         this.phone = court.phone;

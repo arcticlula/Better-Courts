@@ -9,15 +9,19 @@
       <h3>{{ currentCourt?.club_name }}</h3>
     </template>
     <div>
-      <h4>
-        <n-space><span>{{ currentCourt?.court_name }}</span> <span>({{ currentCourt?.startTime }} -
-            {{ currentCourt?.endTime }})</span></n-space>
-      </h4>
       <n-carousel>
         <img v-for="photo of currentCourt?.photos" class="carousel-img" :src="photo.path">
       </n-carousel>
-      <h4>{{ currentCourt?.roof }}</h4>
-      <h4>{{ currentCourt?.address }}</h4>
+      <div class="modal-court-name">{{ currentCourt?.court_name }}</div>
+      <n-space class="modal-court-characteristics">
+        <div>{{ currentCourt?.roof }}</div>
+        ·
+        <div>{{ currentCourt?.surface }}</div>
+      </n-space>
+      <div class="modal-court-date">{{ currentCourt?.date }}</div>
+      <div class="modal-court-time">{{ currentCourt?.startTime }} -
+        {{ currentCourt?.endTime }}</div>
+      <!-- <div>{{ currentCourt?.address }}</div> -->
     </div>
     <template #footer>
       <n-space justify="end">
@@ -37,7 +41,7 @@
 
 <script lang="ts" setup>
 import Result from './Result.vue';
-import { NModal, NButton, NCarousel, NSpace, NIcon, NGrid, NGi } from 'naive-ui';
+import { NModal, NButton, NCarousel, NSpace, NIcon, NGrid, NGi, NTag } from 'naive-ui';
 import { Link, Call, Location } from '@vicons/ionicons5'
 import { useCourtStore } from '@/store/court';
 import { useGlobalStore } from '@/store/global';
@@ -71,6 +75,23 @@ const getMapsLink = () => {
   width: 100%;
   height: 240px;
   object-fit: cover;
+}
+
+.modal-court-name {
+  margin-top: 8px;
+  font-size: 15px;
+}
+
+.modal-court-characteristics {
+  margin-top: 8px;
+}
+
+.modal-court-date {
+  margin-top: 8px;
+}
+
+.modal-court-time {
+  margin-top: 8px;
 }
 
 @media screen and (max-width: 700px) {

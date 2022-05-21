@@ -45,6 +45,15 @@
             "name": "Mar Padel"
         }
     ],
+    "UrbanSportsIndPadel": [
+        {
+            "id": 8,
+            "court_id": [
+                20
+            ],
+            "name": "Top-padel Fluvial"
+        }
+    ],
     "UrbanSportsPadel": [
         {
             "id": 8,

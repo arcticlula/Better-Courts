@@ -1,0 +1,94 @@
+{
+    "UrbanSportsFilteredFutebol5": [
+        {
+            "id": 372,
+            "name": "Pure Sports - Escola Francisco Torrinha"
+        },
+        {
+            "id": 10,
+            "name": "Footspace"
+        },
+        {
+            "id": 1,
+            "name": "Oporto Indoor Games"
+        },
+        {
+            "id": 28,
+            "name": "Indoor Soccer Arca D'Água"
+        },
+        {
+            "id": 68,
+            "name": "Indoor Soccer São Mamede"
+        },
+        {
+            "id": 443,
+            "name": "2HaveFun - Colégio Alemão do Porto ---futebol 7"
+        },
+        {
+            "id": 281,
+            "name": "Indoor Soccer Nun'Alvares"
+        },
+        {
+            "id": 489,
+            "name": "Indoor Soccer Amial"
+        }
+    ],
+    "UrbanSportsFutebol5": [
+        {
+            "id": 470,
+            "name": "Parque da Aguda"
+        },
+        {
+            "id": 153,
+            "name": "Parque Health Club"
+        },
+        {
+            "id": 372,
+            "name": "Pure Sports - Escola Francisco Torrinha"
+        },
+        {
+            "id": 77,
+            "name": "Grupo Desportivo Banco Pinto e Sotto Mayor"
+        },
+        {
+            "id": 306,
+            "name": "Jogos D7 - Ermesinde"
+        },
+        {
+            "id": 10,
+            "name": "Footspace"
+        },
+        {
+            "id": 1,
+            "name": "Oporto Indoor Games"
+        },
+        {
+            "id": 28,
+            "name": "Indoor Soccer Arca D'Água"
+        },
+        {
+            "id": 90,
+            "name": "Indoor Soccer Madalena"
+        },
+        {
+            "id": 68,
+            "name": "Indoor Soccer São Mamede"
+        },
+        {
+            "id": 65,
+            "name": "Indoor Soccer Canidelo"
+        },
+        {
+            "id": 443,
+            "name": "2HaveFun - Colégio Alemão do Porto ---futebol 7"
+        },
+        {
+            "id": 281,
+            "name": "Indoor Soccer Nun'Alvares"
+        },
+        {
+            "id": 489,
+            "name": "Indoor Soccer Amial"
+        }
+    ]
+}
