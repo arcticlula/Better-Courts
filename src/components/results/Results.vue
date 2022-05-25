@@ -6,33 +6,62 @@
   </n-grid>
   <n-modal v-model:show="showCourtModal" :bordered="true" preset="card" class="modal-card">
     <template #header>
-      <h3>{{ currentCourt?.club_name }}</h3>
+      <n-space align="center" size="small">
+        <h3>{{ currentCourt?.club_name }}</h3>
+        <n-rate class="modal-court-rating" allow-half readonly :default-value="currentCourt?.rating" />
+      </n-space>
     </template>
     <div>
       <n-carousel>
         <img v-for="photo of currentCourt?.photos" class="carousel-img" :src="photo.path">
       </n-carousel>
-      <div class="modal-court-name">{{ currentCourt?.court_name }}</div>
-      <n-space class="modal-court-characteristics">
-        <div>{{ currentCourt?.roof }}</div>
-        ·
-        <div>{{ currentCourt?.surface }}</div>
+      <n-divider>
+        <div class="modal-court-name">{{ currentCourt?.court_name }}</div>
+      </n-divider>
+      <div class="modal-court-characteristics">
+        <n-tag round type="info">{{ currentCourt?.roof }}</n-tag>
+        <n-divider vertical />
+        <n-tag round type="success">{{ currentCourt?.surface }}</n-tag>
+      </div>
+      <!-- <n-tag round> -->
+      <n-divider />
+      <n-space justify="space-between">
+        <n-tag>
+          {{ currentCourt?.date }}
+        </n-tag>
+        <!-- · -->
+        <div>
+          <n-tag>
+            {{ currentCourt?.startTime }}
+          </n-tag>
+          <n-divider vertical />
+          <n-tag>
+            {{ currentCourt?.endTime }}
+          </n-tag>
+        </div>
       </n-space>
-      <div class="modal-court-date">{{ currentCourt?.date }}</div>
-      <div class="modal-court-time">{{ currentCourt?.startTime }} -
-        {{ currentCourt?.endTime }}</div>
+      <!-- </n-tag> -->
+      <n-divider />
       <!-- <div>{{ currentCourt?.address }}</div> -->
     </div>
     <template #footer>
       <n-space justify="end">
-        <n-button tag="a" :href="getACLink()" target="_blank">
-          <n-icon :component="Link"></n-icon>
+        <n-button type="info" secondary tag="a" :href="getACLink()" target="_blank">
+          Ver no Aircourts
+          <template #icon>
+            <n-icon :component="Link"></n-icon>
+          </template>
         </n-button>
-        <n-button tag="a" :href="'tel:' + currentCourt?.phone">
-          <n-icon :component="Call"></n-icon>
+        <n-button type="success" secondary tag="a" :href="'tel:' + currentCourt?.phone">
+          Ligar
+          <template #icon>
+            <n-icon :component="Call"></n-icon>
+          </template>
         </n-button>
-        <n-button tag="a" :href="getMapsLink()" target="_blank">
-          <n-icon :component="Location"></n-icon>
+        <n-button type="warning" secondary tag="a" :href="getMapsLink()" target="_blank">
+          <template #icon>
+            <n-icon :component="Location"></n-icon>
+          </template>
         </n-button>
       </n-space>
     </template>
@@ -41,11 +70,12 @@
 
 <script lang="ts" setup>
 import Result from './Result.vue';
-import { NModal, NButton, NCarousel, NSpace, NIcon, NGrid, NGi, NTag } from 'naive-ui';
+import { NModal, NButton, NCarousel, NSpace, NIcon, NGrid, NGi, NTag, NDivider, NRate } from 'naive-ui';
 import { Link, Call, Location } from '@vicons/ionicons5'
 import { useCourtStore } from '@/store/court';
 import { useGlobalStore } from '@/store/global';
 import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
 
 const globalStore = useGlobalStore()
 const courtStore = useCourtStore()
@@ -77,21 +107,17 @@ const getMapsLink = () => {
   object-fit: cover;
 }
 
+.modal-court-rating {
+  display: flex;
+  margin-left: 8px;
+}
+
 .modal-court-name {
-  margin-top: 8px;
   font-size: 15px;
 }
 
 .modal-court-characteristics {
-  margin-top: 8px;
-}
-
-.modal-court-date {
-  margin-top: 8px;
-}
-
-.modal-court-time {
-  margin-top: 8px;
+  margin-bottom: 16px;
 }
 
 @media screen and (max-width: 700px) {
