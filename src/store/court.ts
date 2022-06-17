@@ -50,11 +50,11 @@ export const useCourtStore = defineStore('court', {
         "&start_time=" + searchForm.value.time +
         "&page=1&page_size=100000";
 
-      const headers = { 'X-Requested-With': '' };
+      const headers = { 'X-Requested-With': '', 'Access-Control-Allow-Origin': 'true' };
       const res = await fetch(url, { headers });
       searchButtonLoading.value = false;
       if (res.ok) {
-        this.courts = filterCourts(await res.json());
+        this.courts = await filterCourts(await res.json());
         collapseState.value = ['2']
         return true;
       }
@@ -87,7 +87,7 @@ export const useCourtStore = defineStore('court', {
   },
 })
 
-const filterCourts = (data: any) => {
+const filterCourts = async (data: any) => {
   const searchStore = useSearchStore()
   const { searchForm } = storeToRefs(searchStore);
 
@@ -97,7 +97,20 @@ const filterCourts = (data: any) => {
     const slots = court.slots;
     if (isInvalidRoof(court.roof) || filterByClubs(court.club_id, slots)) continue; //Exit to next iteration if invalid
     const minLength = court.booking_length;
-    console.log(minLength)
+    // console.log(court)
+    // if (minLength == 90) {
+    //   const url = 'https://cors-anywhere.herokuapp.com/' + 'https://www.aircourts.com/index.php/api/search_with_club/' + court.club_id +
+    //     "?sport=" + searchForm.value.sport +
+    //     "&date=" + searchForm.value.date +
+    //     "&start_time=" + searchForm.value.time;
+
+    //   const headers = { 'X-Requested-With': '' };
+    //   const res = await fetch(url, { headers });
+    //   if (res.ok) {
+    //     console.log(await res.json());
+    //   }
+    // }
+    // else {
     const slotLength = court.booking_calendar_length;
     for (let i = 0; i < slots.length; i++) {
       const slot = slots[i];
@@ -111,6 +124,7 @@ const filterCourts = (data: any) => {
         }
       }
     }
+    // }
   }
   courts.sort(function (a, b) {
     return ('' + a.datetime).localeCompare(b.datetime);;
@@ -143,7 +157,9 @@ const filterByClubs = (club_id: number, slots: ISlot[]): boolean => {
     const club = clubs.find(s => s.id === club_id);
     if (club) {
       const courtId = club?.court_id;
+      // console.log(courtId)
       if (courtId) {
+        //   const toBeFiltered = Math.sign(courtId) === -1;
         const id = parseInt(slots[0]?.court_id, 10);
         return courtId.find(s => s === id) ? false : true;
       }

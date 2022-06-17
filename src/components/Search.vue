@@ -54,11 +54,11 @@
         </n-space>
       </n-form-item-gi>
       <n-form-item-gi span="4 s:4 m:2" offset="1 m:0" class="button-refresh">
-        <n-button @click="goToLink">
+        <!-- <n-button @click="goToLink">
           <template #icon>
             <n-icon :component="Refresh"></n-icon>
           </template>
-        </n-button>
+        </n-button> -->
       </n-form-item-gi>
       <!-- <n-form-item-gi span="4" class="button-refresh">
         <n-button @click="goToLink">
@@ -81,7 +81,7 @@
 
 <script lang="ts" setup>
 import { FormInst, NButton, NForm, NFormItemGi, NGrid, NSelect, NDatePicker, NTimePicker, NRadioGroup, NRadioButton, NTag, NSpace, NIcon, useMessage } from 'naive-ui';
-import { Search, Refresh, Calendar } from '@vicons/ionicons5'
+import { Search, Refresh } from '@vicons/ionicons5'
 import { ref } from 'vue'
 import { useGlobalStore } from '@/store/global';
 import { useSearchStore } from '@/store/search';
@@ -106,9 +106,9 @@ const message = useMessage();
 const sports = [{ label: "Padel", value: 4 }, { label: "Futebol 5", value: 1 }, { label: "Futsal", value: 6 }, { label: "Tenis", value: 3 }];
 const cities = [{ label: "Porto", value: 12 }];
 
-const goToLink = () => {
-  window.open(proxy, '_blank');
-}
+// const goToLink = () => {
+//   window.open(proxy, '_blank');
+// }
 
 const getCurrentDate = () => {
   const temp = new Date();
