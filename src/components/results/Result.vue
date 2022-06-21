@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NImage, NCard } from 'naive-ui';
+import { NCard, NImage } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { toRefs } from 'vue';
 import { CourtResult } from '../../models/court';

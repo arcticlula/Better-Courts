@@ -27,6 +27,7 @@ export interface ISlot {
     date: string;
     locked: boolean;
     status: string;
+    durations?: any[];
 }
 
 export interface IPhoto {

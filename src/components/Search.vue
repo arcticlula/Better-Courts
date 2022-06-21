@@ -60,13 +60,6 @@
           </template>
         </n-button> -->
       </n-form-item-gi>
-      <!-- <n-form-item-gi span="4" class="button-refresh">
-        <n-button @click="goToLink">
-          <template #icon>
-            <n-icon :component="Calendar"></n-icon>
-          </template>
-        </n-button>
-      </n-form-item-gi> -->
     </n-grid>
     <div style="display: flex; justify-content: flex-end">
       <n-button :loading="searchButtonLoading" strong secondary type="primary" icon-placement="right" @click="search">
@@ -94,7 +87,6 @@ const searchStore = useSearchStore()
 const courtStore = useCourtStore()
 
 const { searchButtonLoading } = storeToRefs(globalStore);
-const { proxy } = globalStore;
 const { searchForm } = storeToRefs(searchStore);
 const { courtsSelection } = storeToRefs(courtStore);
 
@@ -105,10 +97,6 @@ const message = useMessage();
 
 const sports = [{ label: "Padel", value: 4 }, { label: "Futebol 5", value: 1 }, { label: "Futsal", value: 6 }, { label: "Tenis", value: 3 }];
 const cities = [{ label: "Porto", value: 12 }];
-
-// const goToLink = () => {
-//   window.open(proxy, '_blank');
-// }
 
 const getCurrentDate = () => {
   const temp = new Date();
@@ -166,8 +154,4 @@ const search = (e: MouseEvent) => {
 .button-refresh {
   justify-self: flex-end;
 }
-
-// .n-button .n-button__icon .n-icon-slot {
-//   align-items: center
-// }
 </style>
