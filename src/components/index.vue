@@ -29,8 +29,8 @@ import { ArrowUp, SettingsSharp } from '@vicons/ionicons5';
 import { NBackTop, NCollapse, NCollapseItem, NGradientText, NIcon, NSpace, NButton } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { useGlobalStore } from '../store/global';
-import results from './results/results.vue';
-import search from './search.vue';
+import Results from './results/results.vue';
+import Search from './search.vue';
 
 const globalStore = useGlobalStore()
 const { collapseState, showSettingsModal } = storeToRefs(globalStore);
