@@ -13,14 +13,14 @@ import { NConfigProvider, NGlobalStyle, NMessageProvider } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import index from './components/index.vue';
 import settings from './components/settings.vue';
-import { useGlobalStore } from './store/global';
+import { useConfigStore } from './store/config';
 
-const globalStore = useGlobalStore()
-const { setInitialConfig } = globalStore;
-const { getTheme } = storeToRefs(globalStore);
+const configStore = useConfigStore()
+const { getInitialConfig } = configStore;
+const { getTheme } = storeToRefs(configStore);
 
 (async () => {
-  setInitialConfig();
+  getInitialConfig();
 })()
 
 </script>

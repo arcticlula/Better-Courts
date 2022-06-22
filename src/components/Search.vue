@@ -10,16 +10,16 @@
       </n-form-item-gi>
       <n-form-item-gi span="12 s:7 m:4" offset="m:1" label="Data" path="date">
         <n-date-picker v-model:formatted-value="searchForm.date" type="date" value-format="yyyy-MM-dd" :actions="null"
-          input-readonly />
+          input-readonly @update:value="saveConfig" />
       </n-form-item-gi>
       <n-form-item-gi span="6 s:4 m:3" offset="1 s:1 m:1" label="Hora Início" path="time">
         <n-time-picker v-model:formatted-value="searchForm.time" format="HH:mm" :minutes="30" :actions="null"
-          input-readonly />
+          input-readonly @update:value="saveConfig" />
       </n-form-item-gi>
       <n-form-item-gi span="4 s:2 m:2" offset="1 s:1 m:0" class="button-refresh">
         <n-button @click="getCurrentDate">
           <template #icon>
-            <n-icon :component="Refresh"></n-icon>
+            <n-icon :component="CalendarOutline"></n-icon>
           </template>
         </n-button>
       </n-form-item-gi>
@@ -42,13 +42,13 @@
       </n-form-item-gi>
       <n-form-item-gi span="19 s:11 m:8" offset="0 s:1 m:3" label="Tipo" path="tipo">
         <n-space>
-          <n-tag type="success" v-model:checked="searchForm.roof.noroof" checkable>
+          <n-tag type="success" v-model:checked="searchForm.roof.noroof" checkable @click="saveConfig">
             Descoberto
           </n-tag>
-          <n-tag v-model:checked="searchForm.roof.roof" checkable>
+          <n-tag v-model:checked="searchForm.roof.roof" checkable @click="saveConfig">
             Coberto
           </n-tag>
-          <n-tag v-model:checked="searchForm.roof.indoor" checkable>
+          <n-tag v-model:checked="searchForm.roof.indoor" checkable @click="saveConfig">
             Indoor
           </n-tag>
         </n-space>
@@ -74,23 +74,26 @@
 
 <script lang="ts" setup>
 import { FormInst, NButton, NForm, NFormItemGi, NGrid, NSelect, NDatePicker, NTimePicker, NRadioGroup, NRadioButton, NTag, NSpace, NIcon, useMessage } from 'naive-ui';
-import { Search, Refresh } from '@vicons/ionicons5'
+import { Search, CalendarOutline } from '@vicons/ionicons5'
 import { ref } from 'vue'
 import { useGlobalStore } from '@/store/global';
 import { useSearchStore } from '@/store/search';
 import { useCourtStore } from '@/store/court';
 import { storeToRefs } from 'pinia';
 import { Sports } from '../models/sports';
+import { useConfigStore } from '@/store/config';
 
-const globalStore = useGlobalStore()
-const searchStore = useSearchStore()
-const courtStore = useCourtStore()
+const globalStore = useGlobalStore();
+const searchStore = useSearchStore();
+const courtStore = useCourtStore();
+const configStore = useConfigStore();
 
 const { searchButtonLoading } = storeToRefs(globalStore);
 const { searchForm } = storeToRefs(searchStore);
 const { courtsSelection } = storeToRefs(courtStore);
 
 const { getCourts, setCourtsSelection } = courtStore;
+const { saveConfig } = configStore;
 
 const formRef = ref<FormInst | null>(null)
 const message = useMessage();
@@ -115,10 +118,12 @@ const getCurrentDate = () => {
   const time = datetime[1].split(':');
   searchForm.value.date = datetime[0];
   searchForm.value.time = `${time[0]}:${time[1]}`;
+  saveConfig();
 }
 
 const handleSport = () => {
   setCourtsSelection();
+  saveConfig();
 }
 
 const handleCourt = () => {
@@ -127,6 +132,7 @@ const handleCourt = () => {
       searchForm.value.duration = searchForm.value.courts === 2 ? 60 : 90;
       break;
   }
+  saveConfig();
 }
 
 const search = (e: MouseEvent) => {
@@ -145,7 +151,11 @@ const search = (e: MouseEvent) => {
 }
 
 (async () => {
-  getCurrentDate();
+  const configStore = useConfigStore()
+  const { searchConfig } = configStore;
+  if (!searchConfig.datetime) {
+    getCurrentDate();
+  }
 })()
 
 </script>

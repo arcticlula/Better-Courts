@@ -121,7 +121,6 @@ const filterCourts = async (data: any) => {
   for (const result of data.results) {
     const court = new Court(result);
     const { club_id, slots, roof, booking_length: min_length, booking_calendar_length: slotLength } = court;
-    console.log(court.club_name)
     if (isInvalidRoof(roof) || filterByClubs(club_id, slots) || min_length > duration) continue; //Exit to next iteration if invalid
     if (min_length == 90) {
       if (!exceptions.find(s => s == club_id)) {
