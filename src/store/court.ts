@@ -1,4 +1,4 @@
-import { Court, CourtResult, ICourt, ICourtSelection, ISlot } from '@/models/court';
+import { Court, CourtResult, ICourtSelection, ISlot } from '@/models/court';
 import { Roof } from '@/models/roof';
 import { defineStore, storeToRefs } from 'pinia'
 import { useGlobalStore } from './global';

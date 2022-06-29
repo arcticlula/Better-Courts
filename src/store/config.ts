@@ -7,7 +7,7 @@ import { useCourtStore } from './court';
 const searchConfig = ref({
   sport: false,
   court: false,
-  datetime: true,
+  datetime: false,
   roof: false
 });
 
