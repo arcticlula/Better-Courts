@@ -85,8 +85,7 @@ const getACLink = () => {
 const getMapsLink = () => {
   const lat = currentCourt.value?.lat;
   const lng = currentCourt.value?.lng;
-  return `geo:${lat},${lng}`;
-  // return `https://maps.google.com/maps?daddr=${lat},${lng}&amp;ll=`;
+  return `https://maps.google.com/maps?daddr=${lat},${lng}&amp;ll=`;
 }
 
 </script>
