@@ -50,7 +50,8 @@ export const useCourtStore = defineStore('court', {
         "&start_time=" + searchForm.value.time +
         "&page=1&page_size=100000";
 
-      const headers = { 'X-Requested-With': '', 'Access-Control-Allow-Origin': 'true' };
+      // const headers = { 'X-Requested-With': '', 'Access-Control-Allow-Origin': 'true', 'Origin': 'true' };
+      const headers = { 'Access-Control-Allow-Origin': 'true' };
       const res = await fetch(url, { headers });
       searchButtonLoading.value = false;
       if (res.ok) {
