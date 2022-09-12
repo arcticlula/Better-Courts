@@ -8,22 +8,15 @@
       <n-form-item-gi span="11 m:6" offset="1 m:1" label="Cidade" path="city">
         <n-select v-model:value="searchForm.city" placeholder="Cidade" :options="cities" />
       </n-form-item-gi>
-      <n-form-item-gi span="12 s:7 m:4" offset="m:1" label="Data" path="date">
+      <n-form-item-gi span="12 s:6 m:5" offset="m:1" label="Data" path="date">
         <n-date-picker v-model:formatted-value="searchForm.date" type="date" value-format="yyyy-MM-dd" :actions="null"
           input-readonly @update:value="saveConfig" />
       </n-form-item-gi>
-      <n-form-item-gi span="6 s:4 m:3" offset="1 s:1 m:1" label="Hora Início" path="time">
+      <n-form-item-gi span="11 s:5 m:4" offset="1 s:1 m:1" label="Hora Início" path="time">
         <n-time-picker v-model:formatted-value="searchForm.time" format="HH:mm" :minutes="30" :actions="null"
           input-readonly @update:value="saveConfig" />
       </n-form-item-gi>
-      <n-form-item-gi span="4 s:2 m:2" offset="1 s:1 m:0" class="button-refresh">
-        <n-button @click="getCurrentDate">
-          <template #icon>
-            <n-icon :component="CalendarOutline"></n-icon>
-          </template>
-        </n-button>
-      </n-form-item-gi>
-      <n-form-item-gi span="12 s:7 m:7" offset="0 s:2 m:0" label="Duração" path="duration">
+      <n-form-item-gi span="12 s:7 m:6" offset="0 s:1 m:0" label="Duração" path="duration">
         <n-radio-group v-model:value="searchForm.duration" name="duration">
           <n-radio-button :value="60">
             1:00
@@ -36,11 +29,12 @@
           </n-radio-button>
         </n-radio-group>
       </n-form-item-gi>
-      <n-form-item-gi span="11 s:7 m:4" offset="1 s:0 m:0" label="Campos" path="sport">
+      <n-form-item-gi span="11 s:12 m:6" offset="1 s:0 m:1" label="Campos" path="sport">
         <n-select v-model:value="searchForm.courts" placeholder="Campos" :options="courtsSelection"
           @update:value="handleCourt" />
       </n-form-item-gi>
-      <n-form-item-gi span="19 s:11 m:8" offset="0 s:1 m:3" label="Tipo" path="tipo">
+      <n-form-item-gi span="24 s:11 m:10" offset="0 s:1 m:1" label="Tipo" path="tipo">
+        <!-- <n-form-item-gi span="19 s:8 m:7" offset="0 s:1 m:1" label="Tipo" path="tipo"> -->
         <n-space>
           <n-tag type="success" v-model:checked="searchForm.roof.noroof" checkable @click="saveConfig">
             Descoberto
@@ -53,13 +47,13 @@
           </n-tag>
         </n-space>
       </n-form-item-gi>
-      <n-form-item-gi span="4 s:4 m:2" offset="1 m:0" class="button-refresh">
-        <!-- <n-button @click="goToLink">
+      <!-- <n-form-item-gi span="4 s:4 m:2" offset="1 m:0" class="button-refresh">
+        <n-button @click="goToLink">
           <template #icon>
             <n-icon :component="Refresh"></n-icon>
           </template>
-        </n-button> -->
-      </n-form-item-gi>
+        </n-button>
+      </n-form-item-gi> -->
     </n-grid>
     <div style="display: flex; justify-content: flex-end">
       <n-button :loading="searchButtonLoading" strong secondary type="primary" icon-placement="right" @click="search">
@@ -74,7 +68,7 @@
 
 <script lang="ts" setup>
 import { FormInst, NButton, NForm, NFormItemGi, NGrid, NSelect, NDatePicker, NTimePicker, NRadioGroup, NRadioButton, NTag, NSpace, NIcon, useMessage } from 'naive-ui';
-import { Search, CalendarOutline } from '@vicons/ionicons5'
+import { Search } from '@vicons/ionicons5'
 import { ref } from 'vue'
 import { useGlobalStore } from '@/store/global';
 import { useSearchStore } from '@/store/search';
@@ -93,7 +87,7 @@ const { searchForm } = storeToRefs(searchStore);
 const { courtsSelection } = storeToRefs(courtStore);
 
 const { getCourts, setCourtsSelection } = courtStore;
-const { saveConfig } = configStore;
+const { searchConfig, saveConfig } = configStore;
 
 const formRef = ref<FormInst | null>(null)
 const message = useMessage();
@@ -102,22 +96,35 @@ const sports = [{ label: "Padel", value: 4 }, { label: "Futebol 5", value: 1 }, 
 const cities = [{ label: "Porto", value: 12 }];
 
 const getCurrentDate = () => {
-  const temp = new Date();
-  const offset = temp.getTimezoneOffset();
+  const datetime = new Date();
+  const offset = datetime.getTimezoneOffset();
 
-  temp.setTime(temp.getTime() - (offset * 60 * 1000))
-  if (temp.getMinutes() < 30) {
-    temp.setMinutes(30);
+  datetime.setTime(datetime.getTime() - (offset * 60 * 1000))
+  if (datetime.getMinutes() < 30) {
+    datetime.setMinutes(30);
   }
   else {
-    temp.setMinutes(0);
-    temp.setTime(temp.getTime() + (60 * 60 * 1000));
+    datetime.setMinutes(0);
+    datetime.setTime(datetime.getTime() + (60 * 60 * 1000));
   }
 
-  const datetime = temp.toISOString().split('T');
-  const time = datetime[1].split(':');
-  searchForm.value.date = datetime[0];
-  searchForm.value.time = `${time[0]}:${time[1]}`;
+  const dateTemp = datetime.toISOString().split('T');
+  const timeTemp = dateTemp[1].split(':');
+
+  const date = dateTemp[0];
+  const time = `${timeTemp[0]}:${timeTemp[1]}`;
+
+  if (searchConfig.datetime) {
+    if (searchForm.value.date < date || searchForm.value.time < time) {
+      searchForm.value.date = date;
+      searchForm.value.time = time;
+    }
+  }
+  else {
+    searchForm.value.date = date;
+    searchForm.value.time = time;
+  }
+
   saveConfig();
 }
 
@@ -151,11 +158,7 @@ const search = (e: MouseEvent) => {
 }
 
 (async () => {
-  const configStore = useConfigStore()
-  const { searchConfig } = configStore;
-  if (!searchConfig.datetime) {
-    getCurrentDate();
-  }
+  getCurrentDate();
 })()
 
 </script>
